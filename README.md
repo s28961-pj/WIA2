@@ -92,3 +92,53 @@ liczba całkowita bez znaku
 liczba całkowita ze znakiem
 adres pamięci
 liczba zmiennoprzecinkowa
+
+db    0x55                ; just the byte 0x55 
+db    0x55,0x56,0x57      ; three bytes in succession 
+db    'a',0x55            ; character constants are OK 
+db    'hello',13,10,'$'   ; so are string constants 
+dw    0x1234              ; 0x34 0x12 
+dw    'a'                 ; 0x61 0x00 (it's just a number) 
+dw    'ab'                ; 0x61 0x62 (character constant) 
+dw    'abc'               ; 0x61 0x62 0x63 0x00 (string) 
+dd    0x12345678          ; 0x78 0x56 0x34 0x12 
+dd    1.234567e20         ; floating-point constant 
+dq    0x123456789abcdef0  ; eight byte constant 
+dq    1.234567e20         ; double-precision float 
+dt    1.234567e20         ; extended-precision float
+
+MOV    Move (copy)        MOV Dest,Source
+IN     Input                      IN Dest, Port
+OUT    Output                     OUT Port, Source
+ADD     Add                         ADD Dest,Source
+SUB     Subtract                    SUB Dest,Source
+DIV     Divide (unsigned)           DIV Op
+MUL     Multiply (unsigned)         MUL Op
+INC     Increment                   INC Op
+DEC     Decrement                   DEC Op
+CMP     Compare                     CMP Op1,Op2
+INT     Interrupt               INT Nr
+
+AX = AL*source
+DX:AX = AX*source
+
+Instrukcja skoku bezwarunkowego
+
+jmp etykieta
+ ...
+ etykieta: 
+ 
+ ; zwraca sumę a+b 
+f: 
+  push ebp           ; zachowujemy starą wartość ebp
+  mov ebp, esp     
+  sub esp, 4         ; przydzielamy pamięć na zmienna lokalna c
+ 
+  mov eax, [ebp+8]   ; mov eax, [a]
+  add eax, [ebp+12]  ; add eax, [b]     
+  mov [ebp-4], eax   ; mov [c], eax
+                     ; wynik jest juz w eax
+ 
+  mov esp, ebp       ; zwolnienie pamięci na stosie
+  pop ebp            ; przywrócenie poprzedniej wartości ebp
+  ret                ; powrót
